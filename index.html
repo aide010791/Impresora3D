@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">  
+	<link rel="stylesheet" href="css/estilos.css">
+	<title>Registro de uso Impresora 3D</title>
+</head>
+<body>
+	<div class="contenedor">
+		<div class="columna-izquierda">
+			<div class="registro activo" id="registro">
+				<div class="header">
+					<h1>Registro de uso Impresora 3D</h1>
+				</div>
+		
+				<form class="formulario" id="formulario">
+          <div class="input-fecha">
+            <label for="fecha">Fecha: <input type="date" id="fecha" name="fecha" required></label>
+          </div>
+
+          <div class="input-group">
+            <label for="nombre">Nombre: <input type="text" id="nombre"  placeholder=" " name="nombre" required></label>
+          </div>
+
+          <div class="input-group">
+            <label for="boleta">No. de Boleta: <input type="text" id="boleta" name="boleta" required></label>
+          </div>
+
+          <div class="input-group">
+            <label for="materia">Materia: <input type="text" id="materia" name="materia" required></label>
+          </div>
+
+          <div class="input-group">
+            <label for="profesor">Profesor: <input type="text" id="profesor" name="profesor" required></label>
+          </div>
+
+          <div class="input-group">
+            <label for="piezas">Cantidad de piezas: 
+              <select id="piezas" name="piezas" required>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+              </select>
+            </label>        
+          </div>
+
+          <div class="input-group">
+            <label for="tiempo">Horas de uso: <input type="time" id="tiempo" name="tiempo" required></label>
+          </div>
+
+          <div class="input-group">
+            <label for="material">Cantidad de Material: <input type="text" id="material" name="material" required></label>
+          </div>
+          
+          <button type="submit">
+            REGISTRO
+          </button>
+
+        </form>
+			</div>
+
+		  <div class="header exito" id="exito">
+				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle" viewBox="0 0 16 16">
+					<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+					<path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"/>
+				</svg>
+				<h1>Registrado correctamente!</h1>				
+			</div>
+		</div>
+
+		<div class="columna-derecha">
+
+		</div> 
+	</div>
+
+	<script src="js/app.js"></script>
+</body>
+</html>
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+  
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="">
+  <link rel="stylesheet" href="css/estilos.css">
+  <title>Record Form</title>
+</head>
+<body>
+  <div class ="container">
+  <form class="formulario" id="formulario">
+
+    <label for="fecha">Fecha: <input type="date" id="fecha" name="fecha" required></label>
+
+    <div class="input-group">
+      <label for="nombre">Nombre: <input type="text" id="nombre"  placeholder=" " name="nombre" required></label>
+    </div> 
+      
+    <div class="input-group">
+      <label for="boleta">No. de Boleta: <input type="text" id="boleta" name="boleta" required></label>
+    </div>
+
+    <label for="materia">Materia: <input type="text" id="materia" name="materia" required></label>
+
+    <label for="profesor">Profesor: <input type="text" id="profesor" name="profesor" required></label>
+
+    <label for="piezas">Amount of pieces: 
+      <select id="piezas" name="piezas" required>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+        <option value="13">13</option>
+        <option value="14">14</option>
+        <option value="15">15</option>
+      </select>
+    </label>
+
+    <label for="tiempo">Hours of use: <input type="time" id="tiempo" name="tiempo" required></label>
+
+    <label for="material">Cantidad de Material: <input type="text" id="material" name="material" required></label>
+
+
+
+  <button type="submit">
+      REGISTRO
+    </button>
+  </form>
+
+</body>
+<script src="js/app.js"></script>
+</html>
+-->
