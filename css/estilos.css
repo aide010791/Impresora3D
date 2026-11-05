@@ -140,6 +140,28 @@ body {
     letter-spacing: .3px;
 }
 
+/* ── Marca (logo del Lab) ── */
+.marca {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin: 4px 0 24px;
+}
+.marca img {
+    width: 130px;
+    height: 130px;
+    filter: drop-shadow(0 6px 16px rgba(15,23,42,0.15));
+}
+.marca-etiqueta {
+    background: #e0f2fe;
+    color: #0c4a6e;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 999px;
+}
+
 /* ── Campos ── */
 .field { margin-bottom: 18px; }
 
