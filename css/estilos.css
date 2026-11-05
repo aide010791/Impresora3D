@@ -37,7 +37,7 @@ body {
 }
 
 .columna-derecha {
-	background-image: url('Impresora3d.jpg');
+	background-image: url('Impresora3D.jpg');
 	background-size: cover;
 	background-position-x: center;
 }
@@ -140,4 +140,101 @@ button svg {
 	margin-left: 10px;
 	width: 20px;
 	height: 20px;
+}
+
+/* ── Agregados: subtítulo, campos dobles, errores, autocompletado y móvil ── */
+.subtitulo {
+	margin-top: 8px;
+	font-size: 14px;
+	color: #64748b;
+}
+
+.etiqueta {
+	display: block;
+	margin-bottom: 8px;
+	font-weight: 500;
+	font-size: 14px;
+	color: var(--secundario);
+}
+
+.fila-doble {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 12px;
+}
+
+label.sub {
+	font-size: 12px;
+	color: #64748b;
+	margin-bottom: 0;
+}
+
+input, select {
+	padding-left: 16px;
+}
+
+select:focus {
+	outline: none;
+	border: 2px solid var(--primario);
+}
+
+.mensaje-error {
+	display: none;
+	background: #fee2e2;
+	color: #991b1b;
+	border-radius: 5px;
+	padding: 10px 14px;
+	font-size: 14px;
+}
+
+.mensaje-error.visible { display: block; }
+
+button:disabled {
+	opacity: .6;
+	cursor: wait;
+}
+
+.exito h1 { text-align: center; }
+
+.resumen {
+	color: #475569;
+	font-size: 15px;
+	text-align: center;
+}
+
+/* Autocompletado de materia/profesor (js/autocompletar.js del Lab) */
+.ac-contenedor { position: relative; }
+.ac-lista {
+	display: none;
+	position: absolute;
+	left: 0; right: 0;
+	top: calc(100% - 16px);
+	background: #fff;
+	border: 1.5px solid #e2e8f0;
+	border-radius: 8px;
+	box-shadow: 0 8px 24px rgba(15, 23, 42, .12);
+	z-index: 50;
+	max-height: 260px;
+	overflow-y: auto;
+}
+.ac-lista.visible { display: block; }
+.ac-opcion {
+	padding: 10px 14px;
+	cursor: pointer;
+	border-bottom: 1px solid #f1f5f9;
+}
+.ac-opcion:last-child { border-bottom: none; }
+.ac-opcion:hover, .ac-opcion.activa { background: #eef4fa; }
+.ac-texto   { font-size: 15px; color: var(--primario); }
+.ac-detalle { font-size: 12px; color: #94a3b8; margin-top: 2px; }
+
+/* En celular: una sola columna y sin la imagen lateral */
+@media (max-width: 700px) {
+	body { align-items: flex-start; padding: 16px 0; }
+	.contenedor { grid-template-columns: 1fr; width: 94%; }
+	.columna-izquierda { padding: 28px 20px; }
+	.columna-derecha { display: none; }
+	.header { margin-bottom: 24px; }
+	.header h1 { font-size: 24px; }
+	button { width: 100%; justify-content: center; }
 }
