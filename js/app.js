@@ -43,12 +43,14 @@ function mostrarError(paso, texto, campo) {
 }
 
 // Al corregir un campo se quita el aviso de error
-$('formulario').addEventListener('input', e => {
+function quitarAviso(e) {
     if (e.target.classList.contains('invalido')) {
         e.target.classList.remove('invalido');
         document.querySelectorAll('.mensaje-error').forEach(m => m.classList.remove('visible'));
     }
-});
+}
+$('formulario').addEventListener('input', quitarAviso);
+$('formulario').addEventListener('change', quitarAviso);
 
 function limpiarErrores() {
     document.querySelectorAll('.mensaje-error').forEach(e => e.classList.remove('visible'));
@@ -56,7 +58,7 @@ function limpiarErrores() {
 }
 
 function validarPaso1() {
-    for (const [id, nombre] of [['fecha', 'la fecha'], ['nombre', 'tu nombre'], ['boleta', 'tu número de boleta'], ['materia', 'la materia'], ['profesor', 'el profesor']]) {
+    for (const [id, nombre] of [['fecha', 'la fecha'], ['nombre', 'tu nombre'], ['boleta', 'tu número de boleta'], ['carrera', 'tu carrera'], ['materia', 'la materia'], ['profesor', 'el profesor']]) {
         if (!val(id)) return mostrarError(1, `Falta ${nombre}.`, id);
     }
     return true;
@@ -105,6 +107,7 @@ function pintarResumen() {
         ['Fecha', val('fecha')],
         ['Nombre', val('nombre')],
         ['Boleta', val('boleta')],
+        ['Carrera', val('carrera')],
         ['Materia', val('materia')],
         ['Profesor', val('profesor')],
         ['Piezas', d.piezas],
@@ -133,6 +136,7 @@ $('formulario').addEventListener('submit', async (e) => {
         fecha:     val('fecha'),
         nombre:    val('nombre'),
         boleta:    val('boleta'),
+        carrera:   val('carrera'),
         materia:   val('materia'),
         profesor:  val('profesor'),
         piezas:    d.piezas,
@@ -170,7 +174,7 @@ $('formulario').addEventListener('keydown', e => {
 });
 
 function nuevoRegistro() {
-    // Conserva fecha, nombre y boleta para registrar otra impresión rápido
+    // Conserva fecha, nombre, boleta y carrera para registrar otra impresión rápido
     ['materia', 'profesor', 'horas', 'minutos', 'gramos'].forEach(id => $(id).value = '');
     $('piezas').value = 1;
     document.querySelector('input[name="filamento"][value="PLA"]').checked = true;
