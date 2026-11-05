@@ -1,105 +1,161 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
-	<link rel="stylesheet" href="css/estilos.css">
-	<link rel="icon" type="image/png" href="https://aide010791.github.io/BioingenieriaNew/css/favicon.png">
-	<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-	<title>Registro de uso Impresora 3D</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#1e293b">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/estilos.css">
+    <link rel="icon" type="image/png" href="https://aide010791.github.io/BioingenieriaNew/css/favicon.png">
+    <link rel="apple-touch-icon" href="https://aide010791.github.io/BioingenieriaNew/css/apple-touch-icon.png">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <title>Registro Impresión 3D — Lab Bioingeniería</title>
 </head>
 <body>
-	<div class="contenedor">
-		<div class="columna-izquierda">
-			<div class="registro activo" id="registro">
-				<div class="header">
-					<h1>Registro de uso Impresora 3D</h1>
-					<p class="subtitulo">Impresión con filamento — Lab Bioingeniería</p>
-				</div>
 
-				<form class="formulario" id="formulario" novalidate>
-					<div class="input-group">
-						<label for="fecha">Fecha: <input type="date" id="fecha" name="fecha" required></label>
-					</div>
+<header class="header">
+    <img src="https://aide010791.github.io/BioingenieriaNew/css/IPN.png" alt="IPN">
+    <h1>Registro de Impresión 3D<br>Lab de Bioingeniería</h1>
+    <img src="https://aide010791.github.io/BioingenieriaNew/css/UPIITA.png" alt="UPIITA">
+</header>
 
-					<div class="input-group">
-						<label for="nombre">Nombre: <input type="text" id="nombre" name="nombre" maxlength="120" required></label>
-					</div>
+<div class="progress-container" id="progreso">
+    <div class="steps-labels">
+        <span class="step-label active" data-paso="1">1. Tus datos</span>
+        <span class="step-label" data-paso="2">2. Impresión</span>
+        <span class="step-label" data-paso="3">3. Confirmar</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:33%"></div></div>
+</div>
 
-					<div class="input-group">
-						<label for="boleta">No. de Boleta: <input type="text" id="boleta" name="boleta" inputmode="numeric" maxlength="20" required></label>
-					</div>
+<main class="content">
+<form id="formulario" novalidate>
 
-					<div class="input-group">
-						<label for="materia">Materia: <input type="text" id="materia" name="materia" maxlength="120" placeholder="Escribe para ver sugerencias" required></label>
-					</div>
+    <!-- ── Paso 1: datos del alumno ── -->
+    <section class="step active" id="paso-1">
+        <div class="portada">
+            <img src="css/portada.webp" alt="Impresora 3D imprimiendo un modelo de corazón" width="960" height="420">
+            <span class="portada-etiqueta">Impresión con filamento</span>
+        </div>
 
-					<div class="input-group">
-						<label for="profesor">Profesor: <input type="text" id="profesor" name="profesor" maxlength="120" required></label>
-					</div>
+        <h2 class="step-title">Tus datos</h2>
+        <p class="step-subtitle">Registra cada impresión que realices en el laboratorio.</p>
 
-					<div class="input-group">
-						<label for="piezas">Cantidad de piezas:
-							<select id="piezas" name="piezas" required></select>
-						</label>
-					</div>
+        <div class="field">
+            <label for="fecha">Fecha</label>
+            <input type="date" id="fecha" required>
+        </div>
+        <div class="field">
+            <label for="nombre">Nombre completo</label>
+            <input type="text" id="nombre" maxlength="120" autocomplete="name" placeholder="Nombre y apellidos" required>
+        </div>
+        <div class="field">
+            <label for="boleta">Número de boleta</label>
+            <input type="text" id="boleta" maxlength="20" inputmode="numeric" placeholder="Ej. 2024640123" required>
+        </div>
+        <div class="field">
+            <label for="materia">Materia</label>
+            <input type="text" id="materia" maxlength="120" placeholder="Escribe para ver sugerencias" required>
+        </div>
+        <div class="field">
+            <label for="profesor">Profesor</label>
+            <input type="text" id="profesor" maxlength="120" placeholder="Escribe para ver sugerencias" required>
+        </div>
 
-					<div class="input-group">
-						<span class="etiqueta">Tiempo de impresión:</span>
-						<div class="fila-doble">
-							<label for="horas" class="sub">Horas
-								<input type="number" id="horas" name="horas" min="0" max="168" step="1" value="0" inputmode="numeric" required>
-							</label>
-							<label for="minutos" class="sub">Minutos
-								<input type="number" id="minutos" name="minutos" min="0" max="59" step="1" value="0" inputmode="numeric" required>
-							</label>
-						</div>
-					</div>
+        <p class="mensaje-error" id="error-1" role="alert"></p>
+        <div class="nav-btns">
+            <button type="button" class="btn-next" onclick="irPaso(2)">Siguiente →</button>
+        </div>
+    </section>
 
-					<div class="input-group">
-						<span class="etiqueta">Filamento utilizado:</span>
-						<div class="fila-doble">
-							<label for="filamento" class="sub">Tipo
-								<select id="filamento" name="filamento" required>
-									<option value="PLA">PLA</option>
-									<option value="PETG">PETG</option>
-									<option value="ABS">ABS</option>
-									<option value="TPU">TPU</option>
-									<option value="Otro">Otro</option>
-								</select>
-							</label>
-							<label for="gramos" class="sub">Gramos
-								<input type="number" id="gramos" name="gramos" min="0.1" max="5000" step="0.1" inputmode="decimal" placeholder="Ej. 35" required>
-							</label>
-						</div>
-					</div>
+    <!-- ── Paso 2: datos de la impresión ── -->
+    <section class="step" id="paso-2">
+        <h2 class="step-title">Impresión</h2>
+        <p class="step-subtitle">Los datos los muestra el programa de laminado (Cura, PrusaSlicer, etc.).</p>
 
-					<p class="mensaje-error" id="mensaje-error" role="alert"></p>
+        <div class="field">
+            <span class="label">Cantidad de piezas</span>
+            <div class="stepper">
+                <button type="button" class="stepper-btn" onclick="cambiarPiezas(-1)" aria-label="Menos piezas">−</button>
+                <input type="number" id="piezas" value="1" min="1" max="50" inputmode="numeric" aria-label="Cantidad de piezas">
+                <button type="button" class="stepper-btn" onclick="cambiarPiezas(1)" aria-label="Más piezas">+</button>
+            </div>
+        </div>
 
-					<button type="submit" id="btn-registro">REGISTRO</button>
-				</form>
-			</div>
+        <div class="field">
+            <span class="label">Tiempo de impresión</span>
+            <div class="fila-doble">
+                <div class="con-sufijo">
+                    <input type="number" id="horas" min="0" max="168" inputmode="numeric" placeholder="0" aria-label="Horas">
+                    <span>h</span>
+                </div>
+                <div class="con-sufijo">
+                    <input type="number" id="minutos" min="0" max="59" inputmode="numeric" placeholder="0" aria-label="Minutos">
+                    <span>min</span>
+                </div>
+            </div>
+        </div>
 
-			<div class="header exito" id="exito">
-				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-					<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-					<path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"/>
-				</svg>
-				<h1>¡Registrado correctamente!</h1>
-				<p class="resumen" id="resumen"></p>
-				<button type="button" id="btn-otra">Registrar otra impresión</button>
-			</div>
-		</div>
+        <div class="field">
+            <span class="label">Tipo de filamento</span>
+            <div class="chips" role="radiogroup" aria-label="Tipo de filamento">
+                <label class="chip"><input type="radio" name="filamento" value="PLA" checked><span>PLA</span></label>
+                <label class="chip"><input type="radio" name="filamento" value="PETG"><span>PETG</span></label>
+                <label class="chip"><input type="radio" name="filamento" value="ABS"><span>ABS</span></label>
+                <label class="chip"><input type="radio" name="filamento" value="TPU"><span>TPU</span></label>
+                <label class="chip"><input type="radio" name="filamento" value="Otro"><span>Otro</span></label>
+            </div>
+        </div>
 
-		<div class="columna-derecha"></div>
-	</div>
+        <div class="field">
+            <label for="gramos">Filamento utilizado</label>
+            <div class="con-sufijo">
+                <input type="number" id="gramos" min="0.1" max="5000" step="0.1" inputmode="decimal" placeholder="Ej. 35">
+                <span>gramos</span>
+            </div>
+        </div>
 
-	<!-- Catálogo de materias/profesores y autocompletado (compartidos con el registro del Lab) -->
-	<script src="https://aide010791.github.io/BioingenieriaNew/js/catalogo.js"></script>
-	<script src="https://aide010791.github.io/BioingenieriaNew/js/autocompletar.js"></script>
-	<script src="js/app.js"></script>
+        <p class="mensaje-error" id="error-2" role="alert"></p>
+        <div class="nav-btns">
+            <button type="button" class="btn-back" onclick="irPaso(1)">← Atrás</button>
+            <button type="button" class="btn-next" onclick="irPaso(3)">Siguiente →</button>
+        </div>
+    </section>
+
+    <!-- ── Paso 3: confirmar ── -->
+    <section class="step" id="paso-3">
+        <h2 class="step-title">Confirma tu registro</h2>
+        <p class="step-subtitle">Revisa que todo esté correcto antes de enviar.</p>
+
+        <div class="resumen" id="resumen"></div>
+
+        <p class="mensaje-error" id="error-3" role="alert"></p>
+        <button type="submit" class="btn-submit" id="btn-registro">Enviar registro</button>
+        <div class="nav-btns">
+            <button type="button" class="btn-back" onclick="irPaso(2)">← Corregir</button>
+        </div>
+    </section>
+
+    <!-- ── Éxito ── -->
+    <section class="step" id="exito">
+        <div class="exito">
+            <div class="exito-icono" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </div>
+            <h2>¡Registro enviado!</h2>
+            <p id="exito-texto"></p>
+            <button type="button" class="btn-next" onclick="nuevoRegistro()">Registrar otra impresión</button>
+        </div>
+    </section>
+
+</form>
+</main>
+
+<!-- Catálogo de materias/profesores y autocompletado (compartidos con el registro del Lab) -->
+<script src="https://aide010791.github.io/BioingenieriaNew/js/catalogo.js"></script>
+<script src="https://aide010791.github.io/BioingenieriaNew/js/autocompletar.js"></script>
+<script src="js/app.js"></script>
 </body>
 </html>
