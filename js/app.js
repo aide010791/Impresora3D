@@ -6,82 +6,173 @@ const SUPABASE_URL = 'https://yzhdtwdwakzcnlergcpk.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_7-8BuHvJF63KH6T2xavAEA_euEHKqC-';
 const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-const formulario = document.getElementById('formulario');
-const registro   = document.getElementById('registro');
-const exito      = document.getElementById('exito');
-const btn        = document.getElementById('btn-registro');
-const error      = document.getElementById('mensaje-error');
-
-// Piezas 1–15
-const selPiezas = document.getElementById('piezas');
-for (let i = 1; i <= 15; i++) selPiezas.add(new Option(i, i));
+const $ = id => document.getElementById(id);
+const val = id => $(id).value.trim();
 
 function fechaHoy() {
     return new Date().toLocaleDateString('en-CA', { timeZone: 'America/Mexico_City' });
 }
-document.getElementById('fecha').value = fechaHoy();
+$('fecha').value = fechaHoy();
 
-function mostrarError(texto) {
-    error.textContent = texto;
-    error.classList.add('visible');
+// ── Navegación entre pasos ──────────────────────────────────────────────────
+
+let pasoActual = 1;
+
+function mostrarPaso(n) {
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    $(n === 'exito' ? 'exito' : 'paso-' + n).classList.add('active');
+    $('progreso').style.display = n === 'exito' ? 'none' : '';
+    if (n !== 'exito') {
+        $('progress-fill').style.width = (n / 3 * 100) + '%';
+        document.querySelectorAll('.step-label').forEach(l => {
+            const p = Number(l.dataset.paso);
+            l.classList.toggle('active', p === n);
+            l.classList.toggle('done', p < n);
+        });
+        pasoActual = n;
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-formulario.addEventListener('submit', async (e) => {
+function mostrarError(paso, texto, campo) {
+    const e = $('error-' + paso);
+    e.textContent = texto;
+    e.classList.add('visible');
+    if (campo) { $(campo).classList.add('invalido'); $(campo).focus(); }
+    return false;
+}
+
+// Al corregir un campo se quita el aviso de error
+$('formulario').addEventListener('input', e => {
+    if (e.target.classList.contains('invalido')) {
+        e.target.classList.remove('invalido');
+        document.querySelectorAll('.mensaje-error').forEach(m => m.classList.remove('visible'));
+    }
+});
+
+function limpiarErrores() {
+    document.querySelectorAll('.mensaje-error').forEach(e => e.classList.remove('visible'));
+    document.querySelectorAll('.invalido').forEach(e => e.classList.remove('invalido'));
+}
+
+function validarPaso1() {
+    for (const [id, nombre] of [['fecha', 'la fecha'], ['nombre', 'tu nombre'], ['boleta', 'tu número de boleta'], ['materia', 'la materia'], ['profesor', 'el profesor']]) {
+        if (!val(id)) return mostrarError(1, `Falta ${nombre}.`, id);
+    }
+    return true;
+}
+
+function leerImpresion() {
+    const horas = parseInt(val('horas')) || 0;
+    const minutos = parseInt(val('minutos')) || 0;
+    return {
+        piezas: parseInt(val('piezas')) || 0,
+        horas, minutos,
+        tiempo_min: horas * 60 + minutos,
+        filamento: document.querySelector('input[name="filamento"]:checked').value,
+        gramos: parseFloat(val('gramos').replace(',', '.'))
+    };
+}
+
+function validarPaso2() {
+    const d = leerImpresion();
+    if (d.piezas < 1 || d.piezas > 50) return mostrarError(2, 'La cantidad de piezas debe ser entre 1 y 50.', 'piezas');
+    if (d.minutos > 59) return mostrarError(2, 'Los minutos deben ser entre 0 y 59.', 'minutos');
+    if (d.horas > 168) return mostrarError(2, 'Revisa las horas de impresión.', 'horas');
+    if (d.tiempo_min < 1) return mostrarError(2, 'Escribe cuánto tiempo duró la impresión.', 'horas');
+    if (!(d.gramos > 0) || d.gramos > 5000) return mostrarError(2, 'Escribe los gramos de filamento que se usaron (por ejemplo 35).', 'gramos');
+    return true;
+}
+
+function irPaso(n) {
+    limpiarErrores();
+    if (n > pasoActual) {
+        if (pasoActual === 1 && !validarPaso1()) return;
+        if (n >= 3 && !validarPaso2()) return;
+    }
+    if (n === 3) pintarResumen();
+    mostrarPaso(n);
+}
+
+function cambiarPiezas(delta) {
+    const p = Math.min(50, Math.max(1, (parseInt(val('piezas')) || 1) + delta));
+    $('piezas').value = p;
+}
+
+function pintarResumen() {
+    const d = leerImpresion();
+    const filas = [
+        ['Fecha', val('fecha')],
+        ['Nombre', val('nombre')],
+        ['Boleta', val('boleta')],
+        ['Materia', val('materia')],
+        ['Profesor', val('profesor')],
+        ['Piezas', d.piezas],
+        ['Tiempo', `${d.horas} h ${d.minutos} min`],
+        ['Filamento', `${d.filamento} · ${Math.round(d.gramos * 10) / 10} g`]
+    ];
+    const cont = $('resumen');
+    cont.innerHTML = '';
+    filas.forEach(([k, v]) => {
+        const fila = document.createElement('div'); fila.className = 'resumen-fila';
+        const a = document.createElement('span'); a.className = 'resumen-key'; a.textContent = k;
+        const b = document.createElement('span'); b.className = 'resumen-val'; b.textContent = v;
+        fila.append(a, b); cont.appendChild(fila);
+    });
+}
+
+// ── Envío ───────────────────────────────────────────────────────────────────
+
+$('formulario').addEventListener('submit', async (e) => {
     e.preventDefault();
-    error.classList.remove('visible');
+    if (pasoActual !== 3) return;          // Enter en un campo no envía antes de confirmar
+    limpiarErrores();
 
-    const v = id => document.getElementById(id).value.trim();
-    const horas   = parseInt(v('horas'))   || 0;
-    const minutos = parseInt(v('minutos')) || 0;
-    const gramos  = parseFloat(v('gramos').replace(',', '.'));
-    const tiempo_min = horas * 60 + minutos;
-
-    if (!v('fecha') || !v('nombre') || !v('boleta') || !v('materia') || !v('profesor')) {
-        return mostrarError('Completa todos los campos.');
-    }
-    if (minutos > 59 || horas > 168 || tiempo_min < 1) {
-        return mostrarError('Escribe el tiempo de impresión (horas y minutos).');
-    }
-    if (!(gramos > 0) || gramos > 5000) {
-        return mostrarError('Escribe los gramos de filamento usados (por ejemplo 35).');
-    }
-
-    btn.disabled = true;
-    btn.textContent = 'ENVIANDO…';
-
+    const d = leerImpresion();
     const datos = {
-        fecha:     v('fecha'),
-        nombre:    v('nombre'),
-        boleta:    v('boleta'),
-        materia:   v('materia'),
-        profesor:  v('profesor'),
-        piezas:    parseInt(v('piezas')),
-        tiempo_min,
-        filamento: v('filamento'),
-        gramos:    Math.round(gramos * 10) / 10
+        fecha:     val('fecha'),
+        nombre:    val('nombre'),
+        boleta:    val('boleta'),
+        materia:   val('materia'),
+        profesor:  val('profesor'),
+        piezas:    d.piezas,
+        tiempo_min: d.tiempo_min,
+        filamento: d.filamento,
+        gramos:    Math.round(d.gramos * 10) / 10
     };
 
-    const { error: err } = await db.from('impresiones').insert([datos]);
-
+    const btn = $('btn-registro');
+    btn.disabled = true;
+    btn.textContent = 'Enviando…';
+    const { error } = await db.from('impresiones').insert([datos]);
     btn.disabled = false;
-    btn.textContent = 'REGISTRO';
+    btn.textContent = 'Enviar registro';
 
-    if (err) {
-        const sinRed = /fetch|network/i.test(err.message || '');
-        return mostrarError(sinRed
+    if (error) {
+        const sinRed = /fetch|network/i.test(error.message || '');
+        return mostrarError(3, sinRed
             ? 'No hay conexión a internet. Revisa tu conexión e intenta de nuevo.'
             : 'No se pudo registrar. Revisa los datos e intenta de nuevo.');
     }
 
-    document.getElementById('resumen').textContent =
-        `${datos.piezas} pieza(s) · ${horas} h ${minutos} min · ${datos.gramos} g de ${datos.filamento}`;
-    registro.classList.remove('activo');
-    exito.classList.add('activo');
+    $('exito-texto').textContent =
+        `${datos.piezas} pieza(s) · ${d.horas} h ${d.minutos} min · ${datos.gramos} g de ${datos.filamento}`;
+    mostrarPaso('exito');
 });
 
-document.getElementById('btn-otra').addEventListener('click', () => {
-    formulario.reset();
-    document.getElementById('fecha').value = fechaHoy();
-    exito.classList.remove('activo');
-    registro.classList.add('activo');
+// Enter en los campos avanza al siguiente paso en lugar de enviar
+$('formulario').addEventListener('keydown', e => {
+    if (e.key === 'Enter' && e.target.tagName === 'INPUT' && pasoActual < 3) {
+        if (document.querySelector('.ac-lista.visible .ac-opcion.activa')) return; // elegir sugerencia
+        e.preventDefault();
+        irPaso(pasoActual + 1);
+    }
 });
+
+function nuevoRegistro() {
+    // Conserva fecha, nombre y boleta para registrar otra impresión rápido
+    ['materia', 'profesor', 'horas', 'minutos', 'gramos'].forEach(id => $(id).value = '');
+    $('piezas').value = 1;
+    document.querySelector('input[name="filamento"][value="PLA"]').checked = true;
+    mostrarPaso(1);
+}
