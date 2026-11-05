@@ -9,14 +9,24 @@ create table if not exists public.impresiones (
     fecha       date        not null,
     nombre      text        not null check (char_length(nombre)   between 1 and 120),
     boleta      text        not null check (char_length(boleta)   between 1 and 20),
+    carrera     text        check (carrera in ('Biónica', 'Mecatrónica', 'Telemática', 'ISISA', 'Energía')),
     materia     text        not null check (char_length(materia)  between 1 and 120),
     profesor    text        not null check (char_length(profesor) between 1 and 120),
     piezas      int         not null check (piezas between 1 and 50),
     tiempo_min  int         not null check (tiempo_min between 1 and 10080),   -- duración total en minutos
-    filamento   text        not null check (filamento in ('PLA', 'PETG', 'ABS', 'TPU', 'Otro')),
+    filamento   text        not null check (filamento in ('PLA', 'ABS', 'PETG')),
     gramos      numeric(7,1) not null check (gramos > 0 and gramos <= 5000),
     created_at  timestamptz not null default now()
 );
+
+-- Para una tabla ya creada con la versión anterior (sin carrera, con TPU/Otro):
+alter table public.impresiones add column if not exists carrera text;
+alter table public.impresiones drop constraint if exists impresiones_carrera_check;
+alter table public.impresiones add  constraint impresiones_carrera_check
+    check (carrera in ('Biónica', 'Mecatrónica', 'Telemática', 'ISISA', 'Energía'));
+alter table public.impresiones drop constraint if exists impresiones_filamento_check;
+alter table public.impresiones add  constraint impresiones_filamento_check
+    check (filamento in ('PLA', 'ABS', 'PETG')) not valid;   -- not valid: respeta registros viejos
 
 create index if not exists impresiones_fecha_idx on public.impresiones (fecha);
 

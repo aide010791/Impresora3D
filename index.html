@@ -56,6 +56,17 @@
             <input type="text" id="boleta" maxlength="20" inputmode="numeric" placeholder="Ej. 2024640123" required>
         </div>
         <div class="field">
+            <label for="carrera">Carrera</label>
+            <select id="carrera" required>
+                <option value="" disabled selected>Selecciona tu carrera</option>
+                <option value="Biónica">Biónica</option>
+                <option value="Mecatrónica">Mecatrónica</option>
+                <option value="Telemática">Telemática</option>
+                <option value="ISISA">ISISA</option>
+                <option value="Energía">Energía</option>
+            </select>
+        </div>
+        <div class="field">
             <label for="materia">Materia</label>
             <input type="text" id="materia" maxlength="120" placeholder="Escribe para ver sugerencias" required>
         </div>
@@ -102,10 +113,8 @@
             <span class="label">Tipo de filamento</span>
             <div class="chips" role="radiogroup" aria-label="Tipo de filamento">
                 <label class="chip"><input type="radio" name="filamento" value="PLA" checked><span>PLA</span></label>
-                <label class="chip"><input type="radio" name="filamento" value="PETG"><span>PETG</span></label>
                 <label class="chip"><input type="radio" name="filamento" value="ABS"><span>ABS</span></label>
-                <label class="chip"><input type="radio" name="filamento" value="TPU"><span>TPU</span></label>
-                <label class="chip"><input type="radio" name="filamento" value="Otro"><span>Otro</span></label>
+                <label class="chip"><input type="radio" name="filamento" value="PETG"><span>PETG</span></label>
             </div>
         </div>
 
