@@ -1,240 +1,393 @@
-:root {
-	--primario: #013E6A;
-	--secundario: #000;
-}
+/* ── Registro de Impresión 3D — mismo sistema visual que el registro del Lab ── */
 
-* {
-	padding: 0;
-	margin: 0;
-	box-sizing: border-box;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-	background: #F0F4F3;
-	font-family: 'Quicksand', sans-serif;
-
-	min-height: 100vh;
-	display: flex;
-	align-items: center;
-	justify-content: center;
+    font-family: 'Inter', sans-serif;
+    background: #f0f4f8;
+    color: #1e293b;
+    min-height: 100vh;
+    padding-bottom: calc(40px + env(safe-area-inset-bottom));
+    -webkit-text-size-adjust: 100%;
 }
 
-.contenedor {
-	width: 90%;
-	max-width: 800px;
-	border-radius: 10px;
-	overflow: hidden;
-	box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
-	background: #fff;
-	min-height: 60vh;
-
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-}
-
-.columna-izquierda {
-	padding: 40px;
-}
-
-.columna-derecha {
-	background-image: url('Impresora3D.jpg');
-	background-size: cover;
-	background-position-x: center;
-}
-
+/* ── Header ── */
 .header {
-	margin-bottom: 40px;
-	text-align: center;
+    background: #1e293b;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.header img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
 }
 
 .header h1 {
-	color: var(--primario);
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.4;
+    flex: 1;
 }
 
-label {
-	margin-bottom: 10px;
-	display: block;
-	font-weight: 500;
-	color: var(--secundario);
-	font-size: 14px;
+/* ── Barra de progreso ── */
+.progress-container {
+    background: #1e293b;
+    padding: 0 20px 20px;
 }
 
-.input-group, .input-piezas{
-	position: relative;
+.steps-labels {
+    display: flex;
+    justify-content: space-between;
+    max-width: 480px;
+    margin: 0 auto 8px;
 }
 
-.registro {
-	display: none;
+.step-label {
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+    font-weight: 500;
+    transition: color 0.3s;
+}
+.step-label.active { color: #7dd3fc; }
+.step-label.done   { color: rgba(255,255,255,0.7); }
+
+.progress-track {
+    background: rgba(255,255,255,0.15);
+    border-radius: 99px;
+    height: 4px;
+    overflow: hidden;
+    max-width: 480px;
+    margin: 0 auto;
 }
 
-.registro.activo {
-	display: block;
+.progress-fill {
+    background: #7dd3fc;
+    height: 100%;
+    border-radius: 99px;
+    transition: width 0.4s ease;
 }
 
-.exito {
-	display: none;
-	height: 100%;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	gap: 20px;
+/* ── Contenido ── */
+.content {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 24px 16px 0;
 }
 
-.exito.activo {
-	display: flex;
+.step { display: none; }
+.step.active { display: block; animation: aparecer .25s ease; }
+
+@keyframes aparecer {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: none; }
 }
 
-.exito svg {
-	width: 50px;
-	height: 50px;
-	color: var(--primario);
+.step-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 4px;
 }
 
-
-
-input,  select, time{
-	height: 50px;
-	line-height: 50px;
-	font-size: 16px;
-	width: 100%;
-	border: none;
-	border-radius: 5px;
-	padding: 0 20px 0 45px;
-	margin-bottom: 20px;
-	background: #f4f8f7;
-	color: var(--primario);
-	font-family: 'Quicksand', sans-serif;
-	border: 2px solid transparent;
-	transition: .3s ease all;
+.step-subtitle {
+    font-size: 13px;
+    color: #64748b;
+    margin-bottom: 20px;
+    line-height: 1.5;
 }
 
-input:focus {
-	outline: none;
-	border: 2px solid var(--primario);
+/* ── Portada ── */
+.portada {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 22px;
+    aspect-ratio: 16 / 7;
+    background: #334155;
+    box-shadow: 0 6px 20px rgba(15,23,42,0.12);
 }
 
-button {
-	font-family: 'Quicksand', sans-serif;
-	font-size: 16px;
-	border-radius: 5px;
-	margin-top: 20px;
-	background: none;
-	height: 50px;
-	color: var(--primario);
-	padding: 0 50px;
-	display: flex;
-	align-items: center;
-	justify-content: end;
-	border: 2px solid var(--primario);
-	cursor: pointer;
-	transition: .3s ease all;
-	outline: none;
+.portada img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
-button:hover {
-	background: var(--primario);
-	color: #fff;
+.portada::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(15,23,42,0.75), rgba(15,23,42,0) 55%);
 }
 
-button svg {
-	margin-left: 10px;
-	width: 20px;
-	height: 20px;
+.portada-etiqueta {
+    position: absolute;
+    left: 14px;
+    bottom: 12px;
+    z-index: 1;
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .3px;
 }
 
-/* ── Agregados: subtítulo, campos dobles, errores, autocompletado y móvil ── */
-.subtitulo {
-	margin-top: 8px;
-	font-size: 14px;
-	color: #64748b;
+/* ── Campos ── */
+.field { margin-bottom: 18px; }
+
+.field label,
+.field .label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
 }
 
-.etiqueta {
-	display: block;
-	margin-bottom: 8px;
-	font-weight: 500;
-	font-size: 14px;
-	color: var(--secundario);
+.field input {
+    width: 100%;
+    padding: 13px 14px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px; /* 16px mínimo para evitar zoom en iOS */
+    color: #1e293b;
+    background: white;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
 }
+
+.field input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.12);
+}
+
+.field input::placeholder { color: #cbd5e1; }
+.field input.invalido { border-color: #ef4444; }
+
+/* Ocultar flechas de los campos numéricos */
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+input[type=number] { -moz-appearance: textfield; }
 
 .fila-doble {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	gap: 12px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
 }
 
-label.sub {
-	font-size: 12px;
-	color: #64748b;
-	margin-bottom: 0;
+/* Campo con unidad a la derecha (h, min, gramos) */
+.con-sufijo { position: relative; }
+.con-sufijo input { padding-right: 64px; }
+.con-sufijo span {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    color: #94a3b8;
+    font-weight: 500;
+    pointer-events: none;
 }
 
-input, select {
-	padding-left: 16px;
+/* Contador − / + */
+.stepper {
+    display: grid;
+    grid-template-columns: 52px 1fr 52px;
+    gap: 8px;
 }
 
-select:focus {
-	outline: none;
-	border: 2px solid var(--primario);
+.stepper input { text-align: center; font-weight: 700; font-size: 18px; }
+
+.stepper-btn {
+    border: 1.5px solid #e2e8f0;
+    background: white;
+    border-radius: 10px;
+    font-size: 22px;
+    font-weight: 600;
+    color: #1e293b;
+    cursor: pointer;
+}
+.stepper-btn:active { background: #f1f5f9; }
+
+/* Botones de opción (tipo de filamento) */
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
 }
 
+.field label.chip {
+    position: relative;
+    display: inline-block;
+    margin: 0;
+    text-transform: none;
+    letter-spacing: normal;
+    font-size: inherit;
+}
+.chip input { position: absolute; opacity: 0; pointer-events: none; }
+.chip span {
+    display: inline-block;
+    padding: 11px 18px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 999px;
+    background: white;
+    font-size: 15px;
+    font-weight: 600;
+    color: #334155;
+    cursor: pointer;
+    transition: all .15s;
+}
+.chip input:checked + span {
+    background: #1e293b;
+    border-color: #1e293b;
+    color: white;
+}
+.chip input:focus-visible + span { box-shadow: 0 0 0 3px rgba(59,130,246,0.25); }
+
+/* ── Resumen (paso 3) ── */
+.resumen {
+    background: white;
+    border-radius: 14px;
+    border: 1px solid #e2e8f0;
+    padding: 6px 16px;
+}
+
+.resumen-fila {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 11px 0;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 14px;
+}
+.resumen-fila:last-child { border-bottom: none; }
+.resumen-key { color: #64748b; font-weight: 500; flex-shrink: 0; }
+.resumen-val { color: #1e293b; font-weight: 600; text-align: right; }
+
+/* ── Mensajes de error ── */
 .mensaje-error {
-	display: none;
-	background: #fee2e2;
-	color: #991b1b;
-	border-radius: 5px;
-	padding: 10px 14px;
-	font-size: 14px;
+    display: none;
+    background: #fee2e2;
+    color: #991b1b;
+    border-radius: 10px;
+    padding: 11px 14px;
+    font-size: 14px;
+    margin-top: 4px;
 }
-
 .mensaje-error.visible { display: block; }
 
-button:disabled {
-	opacity: .6;
-	cursor: wait;
+/* ── Botones ── */
+.nav-btns {
+    display: flex;
+    gap: 10px;
+    margin-top: 24px;
+    padding-bottom: 8px;
 }
 
-.exito h1 { text-align: center; }
-
-.resumen {
-	color: #475569;
-	font-size: 15px;
-	text-align: center;
+.btn-back,
+.btn-next,
+.btn-submit {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.2s;
 }
 
-/* Autocompletado de materia/profesor (js/autocompletar.js del Lab) */
+.btn-back {
+    flex: 1;
+    padding: 15px;
+    background: white;
+    color: #334155;
+    border: 1.5px solid #e2e8f0;
+    font-size: 15px;
+}
+.btn-back:active { background: #f1f5f9; }
+
+.btn-next {
+    flex: 2;
+    padding: 15px;
+    background: #1e293b;
+    color: white;
+    border: none;
+    font-size: 15px;
+}
+.btn-next:active { background: #0f172a; }
+
+.btn-submit {
+    width: 100%;
+    padding: 16px;
+    background: #2563eb;
+    color: white;
+    border: none;
+    font-size: 16px;
+    font-weight: 700;
+    margin-top: 24px;
+}
+.btn-submit:active { background: #1d4ed8; }
+.btn-submit:disabled { opacity: .6; cursor: wait; }
+
+/* ── Éxito ── */
+.exito {
+    text-align: center;
+    padding: 40px 8px 0;
+}
+
+.exito-icono {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: #dcfce7;
+    color: #16a34a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 18px;
+}
+
+.exito h2 { font-size: 22px; margin-bottom: 8px; }
+.exito p  { color: #64748b; font-size: 14px; margin-bottom: 28px; line-height: 1.5; }
+.exito .btn-next { width: 100%; }
+
+/* ── Autocompletado de materia/profesor (js/autocompletar.js del Lab) ── */
 .ac-contenedor { position: relative; }
 .ac-lista {
-	display: none;
-	position: absolute;
-	left: 0; right: 0;
-	top: calc(100% - 16px);
-	background: #fff;
-	border: 1.5px solid #e2e8f0;
-	border-radius: 8px;
-	box-shadow: 0 8px 24px rgba(15, 23, 42, .12);
-	z-index: 50;
-	max-height: 260px;
-	overflow-y: auto;
+    display: none;
+    position: absolute;
+    left: 0; right: 0;
+    top: 100%;
+    margin-top: 4px;
+    background: white;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(15,23,42,0.12);
+    z-index: 50;
+    max-height: 280px;
+    overflow-y: auto;
 }
 .ac-lista.visible { display: block; }
-.ac-opcion {
-	padding: 10px 14px;
-	cursor: pointer;
-	border-bottom: 1px solid #f1f5f9;
-}
+.ac-opcion { padding: 11px 14px; cursor: pointer; border-bottom: 1px solid #f1f5f9; }
 .ac-opcion:last-child { border-bottom: none; }
-.ac-opcion:hover, .ac-opcion.activa { background: #eef4fa; }
-.ac-texto   { font-size: 15px; color: var(--primario); }
+.ac-opcion:hover, .ac-opcion.activa { background: #eff6ff; }
+.ac-texto   { font-size: 15px; color: #1e293b; }
 .ac-detalle { font-size: 12px; color: #94a3b8; margin-top: 2px; }
 
-/* En celular: una sola columna y sin la imagen lateral */
-@media (max-width: 700px) {
-	body { align-items: flex-start; padding: 16px 0; }
-	.contenedor { grid-template-columns: 1fr; width: 94%; }
-	.columna-izquierda { padding: 28px 20px; }
-	.columna-derecha { display: none; }
-	.header { margin-bottom: 24px; }
-	.header h1 { font-size: 24px; }
-	button { width: 100%; justify-content: center; }
+/* ── Pantallas grandes ── */
+@media (min-width: 700px) {
+    .header { padding: 16px 32px; }
+    .header h1 { font-size: 16px; }
+    .content { padding-top: 32px; }
 }
