@@ -292,6 +292,82 @@ input[type=number] { -moz-appearance: textfield; }
 }
 .chip input:focus-visible + span { box-shadow: 0 0 0 3px rgba(59,130,246,0.25); }
 
+/* ── Tandas (paso 2) ── */
+.tanda {
+    background: white;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 14px 14px 2px;
+    margin-bottom: 12px;
+    scroll-margin-top: 16px;
+}
+.tanda .field input { background: #f8fafc; }
+.tanda .field input:focus { background: white; }
+.tanda .stepper-btn { background: #f8fafc; }
+.tanda .chip span { background: #f8fafc; }
+.tanda .chip input:checked + span { background: #1e293b; }
+
+.tanda-cabecera {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+.tanda-titulo {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1e293b;
+}
+.btn-quitar {
+    background: none;
+    border: none;
+    color: #dc2626;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 4px;
+    cursor: pointer;
+}
+
+/* Con una sola tanda el paso se ve como un formulario normal */
+.tandas.unica .tanda {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+.tandas.unica .tanda-cabecera { display: none; }
+.tandas.unica .tanda .field input,
+.tandas.unica .tanda .stepper-btn,
+.tandas.unica .tanda .chip span { background: white; }
+.tandas.unica .tanda .chip input:checked + span { background: #1e293b; }
+
+.btn-agregar {
+    width: 100%;
+    padding: 13px;
+    background: #f8fafc;
+    border: 1.5px dashed #94a3b8;
+    border-radius: 12px;
+    color: #334155;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 4px;
+}
+.btn-agregar:active { background: #f1f5f9; }
+
+.total-tandas {
+    margin-top: 14px;
+    background: #e0f2fe;
+    border-radius: 12px;
+    padding: 12px 14px;
+    color: #0c4a6e;
+}
+.total-titulo { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .5px; opacity: .8; }
+.total-valor  { font-size: 16px; font-weight: 700; margin-top: 2px; }
+.total-detalle { font-size: 13px; margin-top: 4px; }
+
 /* ── Resumen (paso 3) ── */
 .resumen {
     background: white;
@@ -311,6 +387,9 @@ input[type=number] { -moz-appearance: textfield; }
 .resumen-fila:last-child { border-bottom: none; }
 .resumen-key { color: #64748b; font-weight: 500; flex-shrink: 0; }
 .resumen-val { color: #1e293b; font-weight: 600; text-align: right; }
+.resumen-total { border-top: 1.5px solid #e2e8f0; }
+.resumen-total .resumen-key,
+.resumen-total .resumen-val { color: #0c4a6e; font-weight: 700; }
 
 /* ── Mensajes de error ── */
 .mensaje-error {
