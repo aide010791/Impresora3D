@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="css/estilos.css?v=3">
     <link rel="icon" type="image/png" href="https://aide010791.github.io/BioingenieriaNew/css/favicon.png">
     <link rel="apple-touch-icon" href="https://aide010791.github.io/BioingenieriaNew/css/apple-touch-icon.png">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -81,50 +81,16 @@
         </div>
     </section>
 
-    <!-- ── Paso 2: datos de la impresión ── -->
+    <!-- ── Paso 2: datos de la impresión (una o varias tandas) ── -->
     <section class="step" id="paso-2">
         <h2 class="step-title">Impresión</h2>
-        <p class="step-subtitle">Los datos los muestra el programa de laminado (Cura, PrusaSlicer, etc.).</p>
+        <p class="step-subtitle">Los datos los muestra el programa de laminado (Cura, PrusaSlicer, etc.). Si imprimiste por partes, agrega una tanda por cada vez que usaste la impresora.</p>
 
-        <div class="field">
-            <span class="label">Cantidad de piezas</span>
-            <div class="stepper">
-                <button type="button" class="stepper-btn" onclick="cambiarPiezas(-1)" aria-label="Menos piezas">−</button>
-                <input type="number" id="piezas" value="1" min="1" max="50" inputmode="numeric" aria-label="Cantidad de piezas">
-                <button type="button" class="stepper-btn" onclick="cambiarPiezas(1)" aria-label="Más piezas">+</button>
-            </div>
-        </div>
+        <div class="tandas unica" id="tandas"></div>
 
-        <div class="field">
-            <span class="label">Tiempo de impresión</span>
-            <div class="fila-doble">
-                <div class="con-sufijo">
-                    <input type="number" id="horas" min="0" max="168" inputmode="numeric" placeholder="0" aria-label="Horas">
-                    <span>h</span>
-                </div>
-                <div class="con-sufijo">
-                    <input type="number" id="minutos" min="0" max="59" inputmode="numeric" placeholder="0" aria-label="Minutos">
-                    <span>min</span>
-                </div>
-            </div>
-        </div>
+        <button type="button" class="btn-agregar" id="btn-agregar" onclick="agregarTanda()">+ Agregar otra tanda</button>
 
-        <div class="field">
-            <span class="label">Tipo de filamento</span>
-            <div class="chips" role="radiogroup" aria-label="Tipo de filamento">
-                <label class="chip"><input type="radio" name="filamento" value="PLA" checked><span>PLA</span></label>
-                <label class="chip"><input type="radio" name="filamento" value="ABS"><span>ABS</span></label>
-                <label class="chip"><input type="radio" name="filamento" value="PETG"><span>PETG</span></label>
-            </div>
-        </div>
-
-        <div class="field">
-            <label for="gramos">Filamento utilizado</label>
-            <div class="con-sufijo">
-                <input type="number" id="gramos" min="0.1" max="5000" step="0.1" inputmode="decimal" placeholder="Ej. 35">
-                <span>gramos</span>
-            </div>
-        </div>
+        <div class="total-tandas" id="total-tandas" hidden aria-live="polite"></div>
 
         <p class="mensaje-error" id="error-2" role="alert"></p>
         <div class="nav-btns">
@@ -165,6 +131,6 @@
 <!-- Catálogo de materias/profesores y autocompletado (compartidos con el registro del Lab) -->
 <script src="https://aide010791.github.io/BioingenieriaNew/js/catalogo.js"></script>
 <script src="https://aide010791.github.io/BioingenieriaNew/js/autocompletar.js"></script>
-<script src="js/app.js"></script>
+<script src="js/registro.js"></script>
 </body>
 </html>

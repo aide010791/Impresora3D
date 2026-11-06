@@ -16,6 +16,8 @@ create table if not exists public.impresiones (
     tiempo_min  int         not null check (tiempo_min between 1 and 10080),   -- duración total en minutos
     filamento   text        not null check (filamento in ('PLA', 'ABS', 'PETG')),
     gramos      numeric(7,1) not null check (gramos > 0 and gramos <= 5000),
+    grupo       uuid,                                                        -- tandas del mismo envío comparten grupo
+    tanda       smallint    not null default 1 check (tanda between 1 and 10),
     created_at  timestamptz not null default now()
 );
 
@@ -27,6 +29,12 @@ alter table public.impresiones add  constraint impresiones_carrera_check
 alter table public.impresiones drop constraint if exists impresiones_filamento_check;
 alter table public.impresiones add  constraint impresiones_filamento_check
     check (filamento in ('PLA', 'ABS', 'PETG')) not valid;   -- not valid: respeta registros viejos
+
+-- Varias tandas por registro (cada tanda es una fila; las del mismo envío comparten "grupo")
+alter table public.impresiones add column if not exists grupo uuid;
+alter table public.impresiones add column if not exists tanda smallint not null default 1
+    check (tanda between 1 and 10);
+create unique index if not exists impresiones_grupo_tanda_idx on public.impresiones (grupo, tanda);
 
 create index if not exists impresiones_fecha_idx on public.impresiones (fecha);
 
